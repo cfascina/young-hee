@@ -38,11 +38,39 @@ class Doll {
     }
 }
 
+// Player
+class Player {
+    constructor() {
+        let geometry = new THREE.SphereGeometry(.3, 32, 16);
+        let material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        let sphere = new THREE.Mesh(geometry, material);
+
+        this.player = sphere;
+        this.playerInfo = {
+            positionX: positionStart,
+            velocity: 0
+        }
+
+        sphere.position.x = positionStart;
+        sphere.position.z = 1;
+        scene.add(sphere);
+    }
+
+    move() {
+        this.playerInfo.velocity = .03
+    }
+
+    updatePosition() {
+        this.playerInfo.positionX += this.playerInfo.velocity;
+        this.player.position.x = this.playerInfo.positionX;
+    }
+}
+
 // Create cube
 function createCube(size, positionX, rotationY = 0, colorCode = 0xfbc851) {
-    const geometry = new THREE.BoxGeometry(size.width, size.height, size.depth);
-    const material = new THREE.MeshBasicMaterial({color: colorCode});
-    const cube = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.BoxGeometry(size.width, size.height, size.depth);
+    let material = new THREE.MeshBasicMaterial({color: colorCode});
+    let cube = new THREE.Mesh(geometry, material);
 
     cube.position.x = positionX;
     cube.rotation.y = rotationY;
@@ -57,18 +85,6 @@ function createTrack() {
     createCube({width: .2, height: 1.5, depth: 1}, positionStart, .35);
     createCube({width: .2, height: 1.5, depth: 1}, postionEnd, -.35);
 }
-
-// Render the scene repeatedly
-function renderScene() {
-    renderer.render(scene, camera);
-
-    // cube.rotation.x += .01
-    // cube.rotation.y += .01
-    // cube.rotation.z += .01
-
-    requestAnimationFrame(renderScene);
-}
-renderScene();
 
 // Responsiveness
 window.addEventListener('resize', onWindowResize, false);
@@ -86,4 +102,14 @@ setTimeout(() => {
     // doll.lookForward();
 }, 1000);
 
+const player = new Player();
+
 createTrack();
+
+// Render the scene repeatedly
+function renderScene() {
+    renderer.render(scene, camera);
+    requestAnimationFrame(renderScene);
+    player.updatePosition();
+}
+renderScene();

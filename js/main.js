@@ -25,11 +25,11 @@ class Doll {
     }
 
     lookBackward() {
-        this.doll.rotation.y = -3.15
+        gsap.to(this.doll.rotation, {y: -3.15, duration: .45});
     }
     
     lookForward() {
-        this.doll.rotation.y = 0
+        gsap.to(this.doll.rotation, {y: 0, duration: .45});
     }
 }
 
@@ -38,7 +38,6 @@ class Doll {
 // const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 // const cube = new THREE.Mesh(geometry, material);
 // scene.add(cube);
-
  
 // Render the scene repeatedly
 function renderScene() {

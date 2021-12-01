@@ -57,7 +57,11 @@ class Player {
     }
 
     move() {
-        this.playerInfo.velocity = .03
+        this.playerInfo.velocity = .03;
+    }
+
+    stop() {
+        gsap.to(this.playerInfo, {velocity: 0, duration: .1});
     }
 
     updatePosition() {
@@ -95,16 +99,28 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
+// Game Controls
+window.addEventListener('keydown', (e) => {
+    if(e.key == 'ArrowRight') {
+        player.move();
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    if(e.key == 'ArrowRight') {
+        player.stop();
+    }
+});
+
 // Init
 let doll = new Doll();
+let player = new Player();
+createTrack();
+
 setTimeout(() => {
     doll.lookBackward();
     // doll.lookForward();
 }, 1000);
-
-const player = new Player();
-
-createTrack();
 
 // Render the scene repeatedly
 function renderScene() {

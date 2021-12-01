@@ -5,6 +5,11 @@ const renderer = new THREE.WebGLRenderer();
 const light = new THREE.AmbientLight(0xffffff);
 const loader = new THREE.GLTFLoader();
 
+// Global Variables
+const positionStart = -3
+const postionEnd = 3
+const trackWidth = positionStart * -2 + .2
+
 // Initial Settings
 scene.add(light);
 camera.position.z = 5;
@@ -33,12 +38,26 @@ class Doll {
     }
 }
 
-// Create the cube
-// const geometry = new THREE.BoxGeometry();
-// const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-// const cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
+// Create cube
+function createCube(size, positionX, rotationY = 0, colorCode = 0xfbc851) {
+    const geometry = new THREE.BoxGeometry(size.width, size.height, size.depth);
+    const material = new THREE.MeshBasicMaterial({color: colorCode});
+    const cube = new THREE.Mesh(geometry, material);
+
+    cube.position.x = positionX;
+    cube.rotation.y = rotationY;
+    scene.add(cube);
+
+    return cube;
+}
  
+// Create Track
+function createTrack() {
+    createCube({width: trackWidth, height: 1.5, depth: 1}, 0, 0, 0xe5a716).position.z = -1;
+    createCube({width: .2, height: 1.5, depth: 1}, positionStart, .35);
+    createCube({width: .2, height: 1.5, depth: 1}, postionEnd, -.35);
+}
+
 // Render the scene repeatedly
 function renderScene() {
     renderer.render(scene, camera);
@@ -62,8 +81,9 @@ function onWindowResize() {
 
 // Init
 let doll = new Doll();
-
 setTimeout(() => {
     doll.lookBackward();
-    doll.lookForward();
+    // doll.lookForward();
 }, 1000);
+
+createTrack();
